@@ -1,5 +1,17 @@
 \documentclass{article}
 \usepackage{hyperref}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+\makeatletter
+\renewcommand{\@seccntformat}[1]{%
+  \ifcsname prefix@#1\endcsname
+    \csname prefix@#1\endcsname
+  \else
+    \csname the#1\endcsname\quad
+  \fi}
+\newcommand\prefix@section{}
+\makeatother
+
 \begin{document}
 
   \begin{center}
@@ -7,9 +19,9 @@
      \large{Florian Ludewig, Übungsgruppe 2}
   \end{center}
 
-  \bf{Aufgabe 1}\\
-  \textnormal{a)}
-  \begin{verbatim}
+\section{Aufgabe 1}
+\bf{a)}\\
+\begin{verbatim}
 #include <stdio.h>
 
 int main(void)
@@ -27,10 +39,9 @@ int main(void)
   printf("%d\n", f);
   return 0;
 }
-    \end{verbatim}
-
-  \textnormal{b)}
-  \begin{verbatim}
+\end{verbatim}
+\bf{b)}\\
+\begin{verbatim}
 #include <stdio.h>
 
 int main(void)
@@ -46,8 +57,55 @@ int main(void)
   printf("Die Quersumme von %d ist: %d\n", n, q);
   return 0;
 }
-    \end{verbatim}
+\end{verbatim}
 
-  \bf{Aufgabe 2}\\
-  \bf{Aufgabe 3}\\
+\pagebreak
+\section{Aufgabe 2}
+\begin{verbatim}
+#include <stdio.h>
+
+int main()
+{
+  int fahrenheit, celsius;
+
+  printf("Geben Sie eine ganze, positive Zahl ein: ");
+  scanf("%d", &fahrenheit);
+
+  celsius = (fahrenheit - 32) * 5 / 9;
+  printf("%d Grad Fahrenheit sind %d Grad Celsius", fahrenheit, celsius);
+  return 0;
+}
+\end{verbatim}
+
+\section{Aufgabe 3}
+\begin{verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+  int x1, y1, z1,
+      x2, y2, z2;
+
+  printf("Koordinaten musst du wiefolgt formatieren: x y z\n");
+  printf("Gebe die Koordinaten für den ersten Punkt ein: ");
+  scanf("%d %d %d", &x1, &y1, &z1);
+  printf("Gebe die Koordinaten für den zweiten Punkt ein: ");
+  scanf("%d %d %d", &x2, &y2, &z2);
+
+  float xLength = abs(x1 - x2),
+        yLength = abs(y1 - y2),
+        zLength = abs(z1 - z2),
+        volume = xLength * yLength * zLength,
+        surfaceArea = 2 * (yLength * zLength + yLength * xLength + xLength * zLength),
+        edgeLength = 4 * (xLength + yLength + zLength);
+
+  printf("\nVolumen: %.2f\n", volume);
+  printf("Oberflächeninhalt: %.2f\n", surfaceArea);
+  printf("Kantenlängen: %.2f\n", edgeLength);
+
+  return 0;
+}
+\end{verbatim}
+
 \end{document}
