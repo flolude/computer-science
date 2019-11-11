@@ -1,3 +1,33 @@
+# Aufgabenblatt 3
+
+> Florian Ludewig, Übungsgruppe 2
+
+## Aufgabe 1
+
+### a)
+
+| Ausdruck                                              |  Wert   |
+| ----------------------------------------------------- | :-----: |
+| `int x = 49;`                                         |   `-`   |
+| `!(x >= 0 && x < 50 || x > 50 && x <= 100)`           | `true`  |
+| `x++ == 49 || x-- == 49`                              | `false` |
+| `!(x >= 0 && x < 50 || x > 50 && x <= 100)`           | `true`  |
+| `int k; scanf("%d", &k); —`                           |   `-`   |
+| `!(k > 0 && k%10 <= 7) == (!(k > 0) || !(k%10 <= 7))` | `true`  |
+
+### b)
+
+#### 1. `!(m > 10) && (n != 0)`
+
+#### 2. `(x > 0) && (y > 0) && (z > 0) && (x % 5 == 0) && (y % 5 == 0) && (z % 5 == 0)`
+
+#### 3. `(a >= 1 && a <= 10) || (a < -7)`
+
+#### 4. `1 < 5`
+
+## Aufgabe 2
+
+```c
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -101,3 +131,4 @@ int main()
   printf("%d Euro\n", price);
   return 0;
 }
+```
