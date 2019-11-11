@@ -1,3 +1,101 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  morecomment=[l][\color{magenta}]
+}
+\lstdefinestyle{customCStyle2}{language=C,breaklines=true}
+\lstset{basicstyle=\ttfamily\footnotesize,style=customCStyle2}
+
+\begin{document}
+\title{Aufgabenblatt 3}
+\author{Florian Ludewig}
+\maketitle
+\section{Aufgabe 1}
+\subsection{a)}
+\begin{tabular}{ | l | l | }
+\hline
+Ausdruck & Wert \\
+\hline
+\begin{lstlisting}
+int x = 49;
+\end{lstlisting}
+& -- \\
+\hline
+\begin{lstlisting}
+!(x >= 0 \&\& x < 50 || x > 50 \&\& x <= 100)
+\end{lstlisting}
+&
+\begin{lstlisting}
+true
+\end{lstlisting}
+\\
+\hline
+\begin{lstlisting}
+x++ == 49 || x-- == 49
+\end{lstlisting}
+&
+\begin{lstlisting}
+false
+\end{lstlisting}
+\\
+\hline
+\begin{lstlisting}
+!(x >= 0 \&\& x < 50 || x > 50 \&\& x <= 100)
+\end{lstlisting}
+&
+\begin{lstlisting}
+true
+\end{lstlisting}
+\\
+\hline
+\begin{lstlisting}
+int k; scanf("\%d", \&k);
+\end{lstlisting}
+& -- \\
+\hline
+\begin{lstlisting}
+!(k > 0 \&\& k\%10 <= 7) == (!(k > 0) || !(k\%10 <= 7))
+\end{lstlisting}
+&
+\begin{lstlisting}
+true
+\end{lstlisting}
+\\
+\hline
+\end{tabular}
+\subsection{b)}
+\begin{lstlisting}
+1) !(m > 10) && (n != 0)
+\end{lstlisting}
+\begin{lstlisting}
+2) (x > 0) && (y > 0) && (z > 0) && (x % 5 == 0) && (y % 5 == 0) && (z % 5 == 0)
+\end{lstlisting}
+\begin{lstlisting}
+3) (a >= 1 && a <= 10) || (a < -7)
+\end{lstlisting}
+\begin{lstlisting}
+4) 1 < 3
+\end{lstlisting}
+\section{Aufgabe 2}
+\lstset{basicstyle=\ttfamily\footnotesize,style=customCStyle}
+\begin{lstlisting}
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -102,7 +200,8 @@ int main()
     price += count_zone_crosses(trip) * ZONE_CROSS_PRICE;
     price += count_end_stops(trip) * END_STOP_PRICE;
   }
-
   printf("%d Euro\n", price);
   return 0;
 }
+\end{lstlisting}
+\end{document}
