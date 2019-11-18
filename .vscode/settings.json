@@ -1,5 +1,8 @@
 {
   "cSpell.words": [
     "Zielhaltestelle"
-  ]
+  ],
+  "files.associations": {
+    "stdc++.h": "c"
+  }
 }
