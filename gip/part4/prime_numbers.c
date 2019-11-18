@@ -31,10 +31,10 @@ int smallest_prime_divider(int number)
 int main(void)
 {
   int input;
-  printf("Bitte gebe eine Zahl ein: ");
+  printf("Bitte gib eine Zahl ein: ");
   scanf("%d", &input);
 
-  int factors[10];
+  int factors[100];
 
   int iteration = 0;
   while (input > 1)
@@ -45,7 +45,6 @@ int main(void)
     iteration++;
   }
 
-  int array_size = sizeof(factors) / sizeof(int);
   for (int i = 0; i < iteration; i++)
   {
     if (i == iteration - 1)
