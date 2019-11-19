@@ -3,26 +3,29 @@
 
 int main()
 {
-  float accuracy;
+  double accuracy;
   printf("Genauigkeit eingeben: ");
-  scanf("%f", &accuracy);
+  scanf("%lf", &accuracy);
 
-  float pi = 0;
+  double pi = 0;
   int n = 0;
+  double sum = 0;
 
   while (1)
   {
-    float numerator = n % 2 == 0 ? 1 : -1;
-    float denominator = 2 * n + 1;
-    float summand = numerator / denominator;
+    double numerator = n % 2 == 0 ? 1 : -1;
+    double denominator = 2 * n + 1;
+    double summand = numerator / denominator;
 
-    if (fabs(summand) < accuracy)
+    double new_sum = sum + summand;
+
+    if (fabs((sum * 4) - (new_sum * 4)) < accuracy)
       break;
 
-    pi += summand;
+    sum = new_sum;
     n++;
   }
-  pi *= 4;
+  pi = sum * 4;
 
   printf("Pi nach %d Iterationen: %f\n", n, pi);
   printf("Abweichung: %f\n", fabs(pi - M_PI));
