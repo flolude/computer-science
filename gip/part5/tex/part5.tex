@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 5: Gleitkommazahlen}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Zinseszinstabelle}
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>
+
+int main(void) {
+  double capital, interest_rate;
+  int years;
+  printf("Startkapital in EUR: "); scanf("%lf", &capital);
+  printf("Zinssatz in Prozent: "); scanf("%lf", &interest_rate);
+  printf("Laufzeit in Jahren: "); scanf("%d", &years);
+
+  for (int i = 1; i <= years; i++) {
+    double current_capital = capital * pow((1 + (interest_rate / 100)), i);
+    printf("Kapital im %d.ten Jahr: %.2lf EUR\n", i, current_capital);
+  }
+  return 0;
+}
+\end{lstlisting}
+\section{Aufgabe 2 -- Flächeninhalt eines Dreiecks}
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>
+
+struct vector2d {
+  float x;
+  float y;
+};
+
+int main(){
+  struct vector2d p1, p2, p3;
+  printf("Punkt 1 eingeben: "); scanf("%f %f", &p1.x, &p1.y);
+  printf("Punkt 2 eingeben: "); scanf("%f %f", &p2.x, &p2.y);
+  printf("Punkt 3 eingeben: "); scanf("%f %f", &p3.x, &p3.y);
+
+  struct vector2d a = { p1.x - p2.x, p1.y - p2.y };
+  struct vector2d b = { p1.x - p3.x, p1.y - p3.y };
+
+  float area = (a.x * b.y - a.y * b.x) / 2;
+  printf("%f Flaecheneinheiten\n", fabs(area));
+
+  return 0;
+}
+\end{lstlisting}
+\pagebreak
+\section{Aufgabe 3 -- Trainingsdaten}
+\begin{lstlisting}
+#include<stdio.h>
+#include<math.h>
+
+int main() {
+  int jump_counter = 0;
+  float biggest, second_biggest, smallest, average;
+
+  printf("Sprungdaten eingeben:\n");
+  while (1) {
+    float x;
+    scanf("%f", &x);
+    if (x <= 0)
+      break;
+    average = ((average * jump_counter) + x) / (jump_counter + 1);
+    if (jump_counter == 0) {
+      biggest = x;
+      smallest = x;
+      second_biggest = x;
+    }
+    if (x > biggest) {
+      second_biggest = biggest;
+      biggest = x;
+    }
+    if (x < smallest)
+      smallest = x;
+    jump_counter++;
+  }
+
+  printf("Anzahl Spruenge: %d\n", jump_counter);
+  printf("Groesste Weite: %.2f\n", biggest);
+  printf("Zweitgroesste Weite: %.2f\n", second_biggest);
+  printf("Kleinste Weite: %.2f\n", smallest);
+  printf("Mittlere Weite: %.2f\n", average);
+  printf("Differenz der groessten und kleinsten Weite: %.2f\n", fabs(biggest - smallest));
+
+  return 0;
+}
+\end{lstlisting}
+\end{document}

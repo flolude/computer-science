@@ -3,6 +3,7 @@
     "Zielhaltestelle"
   ],
   "files.associations": {
-    "stdc++.h": "c"
+    "stdc++.h": "c",
+    "math.h": "c"
   }
 }
