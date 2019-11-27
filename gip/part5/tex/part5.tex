@@ -5,6 +5,7 @@
 \usepackage{color}
 \usepackage[a4paper, total={6in, 10in}]{geometry}
 \usepackage{amsmath}
+\usepackage{pmboxdraw}
 
 \definecolor{my_red}{RGB}{216,60,104}
 \definecolor{my_green}{RGB}{68,189,77}
@@ -13,6 +14,18 @@
 \titleformat{\subsection}{\bfseries}{}{0em}{}
 \titleformat{\subsubsection}{}{}{2em}{}
 
+\lstset{literate= {┏}{{\pmboxdrawuni{250F}}}1
+                  {━}{{\pmboxdrawuni{2501}}}1
+                  {┳}{{\pmboxdrawuni{2533}}}1
+                  {┓}{{\pmboxdrawuni{2513}}}1
+                  {┣}{{\pmboxdrawuni{2523}}}1
+                  {╋}{{\pmboxdrawuni{254B}}}1
+                  {┫}{{\pmboxdrawuni{252B}}}1
+                  {┗}{{\pmboxdrawuni{2517}}}1
+                  {┛}{{\pmboxdrawuni{251B}}}1
+                  {┻}{{\pmboxdrawuni{253B}}}1
+                  {┃}{{\pmboxdrawuni{2503}}}1
+                  }
 \lstdefinestyle{customCStyle}{
   language=C,
   numbers=left,
@@ -42,14 +55,14 @@ int main(void) {
   printf("Zinssatz in Prozent: "); scanf("%lf", &interest_rate);
   printf("Laufzeit in Jahren: "); scanf("%d", &years);
 
-  printf("---------------------------------\n");
-  printf("| Jahr\t| Kapital in EUR\t|\n");
-  printf("---------------------------------\n");
+  printf("┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┓\n");
+  printf("┃ Jahr\t┃ Kapital in EUR\t┃\n");
+  printf("┣━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━┫\n");
   for (int i = 1; i <= years; i++) {
     double current_capital = capital * pow((1 + (interest_rate / 100)), i);
-    printf("| %d\t| %.2lf\t\t|\n", i, current_capital);
+    printf("┃ %d\t┃ %.2lf\t\t┃\n", i, current_capital);
   }
-  printf("---------------------------------\n");
+  printf("┗━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━┛\n");
   return 0;
 }
 \end{lstlisting}
