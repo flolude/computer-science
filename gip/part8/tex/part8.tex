@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage[document]{ragged2e}
+\usepackage[ngerman]{babel}
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{}{}{2em}{}
+
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\title{Aufgabenblatt 8: Reihungen}
+\author{Florian Ludewig (Übungsgruppe 2)}
+\maketitle
+\section{Aufgabe 1 -- Integer-Reihung}
+\begin{lstlisting}
+#include<stdio.h>
+#include<stdlib.h>
+#include<limits.h>
+
+void readIntArray(int a[], int l) {
+  for (int i = 0; i < l; i++) {
+    scanf("%d", &a[i]);
+  }
+}
+
+void printIntArray(int a[], int l) {
+  printf("(");
+  for (int i = 0; i < l; i++) {
+    printf(" %d ", a[i]);
+  }
+  printf(")");
+}
+
+int main(void) {
+  int number_of_integers = 0;
+  printf("Wie viele ganze Zahlen willst du eingeben?\n");
+  scanf("%d", &number_of_integers);
+  int *a = malloc(number_of_integers * sizeof(int));
+  printf("Gebe nun die Zahlen ein\n");
+  readIntArray(a, number_of_integers);
+  printf("Du hast folgende Zahlen eingeben:\n");
+  printIntArray(a, number_of_integers);
+
+  int max = INT_MIN, min = INT_MAX;
+  double average = 0;
+  for (int i = 0; i < number_of_integers; i++) {
+    if (a[i] > max)
+      max = a[i];
+    if (a[i] < min)
+      min = a[i];
+    average += (double)a[i] / number_of_integers;
+  }
+
+  printf("\nMaximum: %d\n", max);
+  printf("Maximum: %d\n", min);
+  printf("Mittelwert: %f\n", average);
+
+  return 0;
+}
+\end{lstlisting}
+\pagebreak
+\section{Aufgabe 2 -- Pferderennen}
+\begin{lstlisting}
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
+#include <limits.h>
+
+void horseRace(int n) {
+  int *horses = malloc(n * sizeof(int));
+  int round = 1, first = 0, second = 0, third = 0;
+
+  while(1) {
+    int random = rand() % n;
+    horses[random]++;
+
+    if (random != first && random != second && random != third && horses[random] > horses[third]) {
+      third = random;
+    }
+    if (horses[third] > horses[second]) {
+      int oldSecond = second;
+      second = third;
+      third = oldSecond;
+    }
+    if (horses[second] > horses[first]) {
+      int oldFirst = first;
+      first = second;
+      second = oldFirst;
+    }
+
+    printf("\nRunde %d:\n", round);
+    printf("Platz 1: Pferd %d (%dm)\n", first + 1, horses[first]);
+    printf("Platz 2: Pferd %d (%dm)\n", second + 1, horses[second]);
+    printf("Platz 3: Pferd %d (%dm)\n", third + 1, horses[third]);
+
+    if (horses[random] >= 10)
+      break;
+
+    round++;
+  }
+}
+
+int main(void) {
+  srand(time(NULL));
+  horseRace(100);
+  return 0;
+}
+\end{lstlisting}
+\end{document}
