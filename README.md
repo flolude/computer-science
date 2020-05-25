@@ -2,10 +2,16 @@
 
 ## Folders
 
-### `ds1` - Discrete Math 1
+### 1st Semester
 
-### `la` - Linear Algebra
+- `ds1` - Discrete Math 1
+- `la` - Linear Algebra
+- `gip` - Programming Basics
 
-### `gip` - Programming Basics
+### 2nd Semester
 
-### `oop` - Object-oriented Programming
+- `an` - Calculus
+- `ds2` - Discrete Math 2
+- `algdat` - Algorithms and Data Structures
+- `computing` - Advanced Computing
+- `oop` - Object-oriented Programming

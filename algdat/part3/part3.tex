@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{tikz}
 \usepackage{rotating}
+\usepackage{algpseudocode}
 
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
@@ -19,7 +20,7 @@
 \maketitle
 
 \section*{Aufgabe 1}
-\subsection*{1.a)}
+\subsection*{a)}
 \texttt{STOOGE-SORT} funktioniert für Felder mit 0, 1 oder 2 Elementen:
 \begin{itemize}
 	\item \textbf{0 Elemente}\\
@@ -52,7 +53,7 @@ Betrachten eines Feldes \texttt{A} der Länge $n$. Der Algorithmus arbeitet drei
 \end{enumerate}
 \vspace*{1\baselineskip}
 
-\subsection*{1.b)}
+\subsection*{b)}
 \texttt{STOOGE-SORT} ist ein rekursiver Algorithmus und seine Laufzeit kann durch folgendes rekursives
 Schema beschrieben werden:
 \[
@@ -70,7 +71,7 @@ Feldes sortiert. Mithilfe des ersten Falles des Mastertheorems lässt sich dann 
 \vspace*{2\baselineskip}
 \section*{Aufgabe 2}
 
-\subsection*{2.a)}
+\subsection*{a)}
 A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 
 \begin{tikzpicture}
@@ -100,7 +101,6 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 		}
 	};
 \end{tikzpicture}
-
 
 \begin{itemize}
 	\item \textbf{HEAPIFY(A, 7)}\\
@@ -228,6 +228,7 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 	      		child [ missing ]
 	      		child { node {16} 
 	      			child { node {8} }
+	      			child [ missing ]
 	      		}
 	      	};
 	      \end{tikzpicture}	              
@@ -259,13 +260,14 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 	      		child [ missing ]
 	      		child { node {16} 
 	      			child { node {8} }
+	      			child [ missing ]
 	      		}
 	      	};
 	      \end{tikzpicture}
 \end{itemize}
 \vspace*{1\baselineskip}
 
-\subsection*{2.b)}
+\subsection*{b)}
 \begin{itemize}
 	\item \textbf{Nach 1x \texttt{Heap-Extract-Max(A)}}\\
 	      \begin{tikzpicture}
@@ -348,28 +350,54 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 
 \vspace*{2\baselineskip}
 \section*{Aufgabe 3}
-
-\subsection*{3.a)}
-
+\subsection*{a)}
+\begin{itemize}
+	\item \texttt{HeapDelete(A,i)}
+	      \begin{algorithmic}
+	      	\State $A[i] \Leftarrow A[\text{heapsize}[A]]$
+	      	\State $\text{heapsize}[A] \Leftarrow \text{heapsize}[A] - 1$
+	      	\State $\text{MaxHeapify}(A,i)$
+	      \end{algorithmic}
+	      \texttt{MaxHeapify} hat eine Laufzeit von $\text{O}(\text{log }n)$. Somit hat dieser \texttt{HeapDelete}
+	      Algorithmus ebenfalls eine Laufzeit von $\text{O}(\text{log }n)$.
+\end{itemize}  
 \vspace*{1\baselineskip}
 
-\subsection*{3.b)}
+\subsection*{b)}
+\begin{itemize}
+	\item \texttt{FindMin(A,i)}
+	      \begin{algorithmic}
+	      	\State $min \Leftarrow A[\floor{\frac{n}{2}}+1]$
+	      	\For{$i \Leftarrow \floor{\frac{n}{2}}+2$ \textbf{to} $n$}
+	      	\If{$A[i] < min$}
+	      	\State{$min \Leftarrow A[i]$}
+	      	\EndIf
+	      	\EndFor
+	      	\State \textbf{return} $min$
+	      \end{algorithmic}
+	      \texttt{FindMin} brauchst $n-\floor{\frac{n}{2}}+1$ Schritte und hat somit eine Laufzeit von $\text{O}(n)$.
+\end{itemize}  
 
 \vspace*{2\baselineskip}
 \section*{Aufgabe 4}
 
-\subsection*{4.a)}
+\subsection*{a)}
+$T(n)=5\cdot T(\frac{n}{2})+n\sqrt{n}$
 \vspace*{1\baselineskip}
 
-\subsection*{4.b)}
+\subsection*{b)}
+$T(n)=16\cdot T(\frac{n}{8})+n^{\frac{4}{3}}$
 \vspace*{1\baselineskip}
 
-\subsection*{4.c)}
+\subsection*{c)}
+$T(n)=5\cdot T(\frac{n}{7})+n\text{ log }n$
 \vspace*{1\baselineskip}
 
-\subsection*{4.d)}
+\subsection*{d)}
+$T(n)=2\cdot T(\frac{n}{4})+3n^{\frac{1}{4}}+\text{ log }n$
 \vspace*{1\baselineskip}
 
-\subsection*{4.e0)}
+\subsection*{e)}
+$T(n)=16\cdot T(\frac{n}{4})+n^2\text{ log }n$
 
 \end{document}
