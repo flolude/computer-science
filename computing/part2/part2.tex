@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{Rechnerstrukturen: Übungsblatt 2}
+\author{Florian Ludewig (185722)}
+\date\today
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1.a)}
+\includegraphics[width=\textwidth]{debug.png}
+\begin{center}\small Visual Studio Code Debugger\end{center}
+
+\subsection*{1.b)}
+Der Integer \texttt{i} hat eine Größe von 4 Bytes. In einem \emph{Little endian} System wird die
+\texttt{1} also folgendermaßen gespeichert: \texttt{00000001 00000000 00000000 00000000}.
+Ist das System \emph{Big endian}, dann wird die \texttt{1} als \texttt{00000000 00000000 00000000 00000001}
+gespeichert.\\
+Durch \texttt{\&i} wird die Speicheradresse von \texttt{i} ausgelesen. Diese zeigt auf den ersten
+8-Bit-Block. Der Datentyp \texttt{char} hat aber nur 1 Byte. Deswegen wird durch die Konvertierung
+in einen \texttt{char} nur der erste 8-Bit-Block gelesen. \\
+In einem einem \emph{Little endian} System ist \texttt{*c} dann \texttt{00000001} und in einem
+\emph{Big endian} System \texttt{00000000}. Folglich wird \texttt{printf("Little endian");}
+ausgeführt wenn \texttt{*c} gleich \texttt{1} ist und \texttt{printf("Big endian");} andernfalls.
+
+\section*{Aufgabe 2}
+\subsection*{2.a)}
+\subsubsection*{Speedup gesamte Strecke}
+$S=\frac{T_{beschleunigt}}{T_{unbeschleunigt}}=\frac{720}{660}=\frac{12}{11}$
+\vspace*{1\baselineskip}
+
+\subsubsection*{Faktor $p$ für Strecke $l_2$}
+Wir wissen $\alpha=\frac{650}{1650}=\frac{4}{11}$ also $(1-\alpha)=\frac{7}{11}$ und durch Einsetzen in
+\[ T_{beschleunigt}=\alpha\cdot T_{unbeschleunigt}+(1-\alpha)\cdot\frac{T_{unbeschleunigt}}{p} \tag{$\star$} \]
+erhalten wir $360=\frac{4}{11}\cdot 420+\frac{7}{11}\cdot\frac{420}{p}$, wodurch $p=\frac{49}{38}$.
+\vspace*{1\baselineskip}
+	
+\subsubsection*{Änderung des Speedups Grenzübergang $p \rightarrow \infty$}
+Bekannt aus der Vorlesung ist folgende Beziehung:
+\[ S=\frac{T_{beschleunigt}}{T_{unbeschleunigt}}=\frac{1}{\alpha+\frac{1-\alpha}{p}} \xrightarrow[p \rightarrow \infty]{} \frac{1}{\alpha} \tag{$\star\star$} \]
+Somit gilt $S=\frac{1}{\alpha}=\frac{1}{\frac{4}{11}}=\frac{11}{4}$.
+\vspace*{1\baselineskip}
+	
+\subsubsection*{Bedeutung des Kerhwerts des Speedups}
+Weil $S=\frac{1}{\alpha}$ ist der Kehrwert vom Speedup $\frac{\alpha}{1}=\alpha$, also der Teil des Problems, welcher nicht
+beschleunigt werden kann.
+	
+\vspace*{2\baselineskip}
+\subsection*{2.b)}
+\subsubsection*{Zeit für einen Speedup von $S=1.6$}
+$S=\frac{720}{t}=1.6 \implies t=450$. Man müsste die Fahrradtour in 450 Sekunden fahren.
+\vspace*{1\baselineskip}
+	
+\subsubsection*{Gesparte Zeit}
+Im Vergleich zur ursprünglichen Tour (720 Sekunden) spart man $720-450=270$ Sekunden.
+\vspace*{1\baselineskip}
+	
+\subsubsection*{Beschleunigung von $t_1$ für die Strecke $l_1$}
+$420+t_1=450\implies t_1=30$ und durch einsetzen in $\star$
+erhalten wir $30=\frac{4}{11}\cdot 300+\frac{7}{11}\cdot\frac{300}{p}$, wodurch $p=-\frac{70}{29}$.
+\vspace*{1\baselineskip}
+
+\subsubsection*{Änderung des Speedups Grenzübergang $p \rightarrow \infty$}
+Wegen $\star\star$ wissen wir $S=\frac{1}{a}=\frac{11}{4}$. Somit wächst $p$ beim Grenzübergang $p\rightarrow \infty$ von
+$-\frac{70}{29}$ bis $\frac{11}{4}$.
+\vspace*{1\baselineskip}
+
+\subsubsection*{Anteil der unbeschleunigten Zeit $t_2$ and der Gesamtzeit}
+$t_1=30$ und $t_2=420$. Also ist der Anteil von $t_2$ an der Gesamtzeit $\frac{420\cdot 100}{30+420}=93.33\%$.
+
+\end{document}
