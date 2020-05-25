@@ -1,0 +1,375 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{rotating}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\title{Algorithmen und Datenstrukturen\\3. Übungsserie}
+\author{Florian Ludewig (185722)}
+\date\today
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1.a)}
+\texttt{STOOGE-SORT} funktioniert für Felder mit 0, 1 oder 2 Elementen:
+\begin{itemize}
+	\item \textbf{0 Elemente}\\
+	      Das Feld ist bereits sortiert.
+	\item \textbf{1 Element}\\
+	      Das Feld ist bereits sortiert.
+	\item \textbf{2 Elemente}\\
+	      Sei \texttt{A=[x,y]}, dann ist \texttt{i=0} und \texttt{j=1}.
+	      Getauscht wird, wenn $y<x$, wodurch das Feld in jedem Fall korrekt sortiert ist.\\
+	      Außerdem ist $l=j-i+1=1-0+1=2$ und $2 \not > 2$ wodurch der Algorithmus terminiert.  
+\end{itemize}
+Angenommen \texttt{STOOGE-SORT} funktioniert für alle Felder der Länge $n-1$ oder kleiner.\\
+Betrachten eines Feldes \texttt{A} der Länge $n$. Der Algorithmus arbeitet drei Schritte ab:
+\begin{enumerate}
+	\item \texttt{STOOGE-SORT(i,j-k)}\\
+	      Hier wird \texttt{STOOGE-SORT} rekursiv mit $i=0$ und $j=(n-1)-\floor{\frac{n}{3}}$ aufgerufen.
+	      Weil wir davon ausgehen, dass der Algorithmus für Felder mit kleineren Längen funktioniert,
+	      sind nach diesem rekursiven Aufruf alle Zahlen im ersten Drittel des Feldes $[0,...,\floor{\frac{n}{3}}]$
+	      kleiner als im zweiten Drittel $[\ceil{\frac{n}{3}},...,n-\floor{\frac{n}{3}}]$.
+	\item \texttt{STOOGE-SORT(i+k,j)}\\
+	      Nun wird \texttt{STOOGE-SORT} rekursiv mit $i=\floor{\frac{n}{3}}$ und $j=n-1$ aufgerufen.
+	      Danach sind mit Sicherheit alle Zahlen im zweiten Drittel des Feldes
+	      $[\floor{\frac{n}{3}},...,n-\floor{\frac{n}{3}}]$ kleiner als die Zahlen im letzten Drittel des
+	      Feldes $[n-\ceil{\frac{n}{3}},...,n-1]$.\\
+	      Demnach befinden sich an diesem Punkt die größten Zahlen im letzten Drittel des Feldes.
+	\item \texttt{STOOGE-SORT(i,j-k)}\\
+	      Zum Schluss wird \texttt{STOOGE-SORT} nochmal rekursiv mit $i=0$ und $j=(n-1)-\floor{\frac{n}{3}}$
+	      aufgerufen, wodurch das Feld in den ersten beiden Dritteln sortiert wird. Weil die größten Zahlen
+	      sich bereits im letzten Drittel befinden ist das Feld nach diesem Schritt vollständig sortiert.
+\end{enumerate}
+\vspace*{1\baselineskip}
+
+\subsection*{1.b)}
+\texttt{STOOGE-SORT} ist ein rekursiver Algorithmus und seine Laufzeit kann durch folgendes rekursives
+Schema beschrieben werden:
+\[
+	T(0)=1,T(1)=1,T(2)=1\\
+\]
+\[
+	T(n)=3\cdot T(\frac{2}{3}n)+O(1)=3\cdot T(\frac{n}{1.5})+O(1)
+\]
+Weil der Algorithmus sich selbst \textbf{drei} mal Aufruft und jedes mal \textbf{zwei Drittel} des
+Feldes sortiert. Mithilfe des ersten Falles des Mastertheorems lässt sich dann die Laufzeit bestimmen:
+\[
+	T(n)\in \Theta(n^{\log_b a})=\Theta(n^{\log_{\frac{3}{2}} 3}) \approx  \Theta(n^{2.7})
+\]
+
+\vspace*{2\baselineskip}
+\section*{Aufgabe 2}
+
+\subsection*{2.a)}
+A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
+
+\begin{tikzpicture}
+	\node{12}
+	child { node {9} 
+		child { node {1}
+			child { node {18} }
+			child { node {23} }
+		}
+		child [ missing ]
+		child { node {41}   
+			child { node {15} }
+			child { node {3} }
+		}
+	} 
+	child [ missing ]
+	child [ missing ]
+	child [ missing ]
+	child {node {6} 
+		child { node {4}
+			child { node {21} }
+			child { node {14} }
+		}
+		child [ missing ]
+		child { node {16} 
+			child { node {8} }
+		}
+	};
+\end{tikzpicture}
+
+
+\begin{itemize}
+	\item \textbf{HEAPIFY(A, 7)}\\
+	      \begin{tikzpicture}
+	      	\node{16}
+	      	child { node {8} }
+	      	child [ missing ];
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 6)}\\
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_left){4}
+	      	child { node {21} }
+	      	child { node (bottom_left){14} };
+	      \end{tikzpicture}
+	      $\hphantom{\rightsquigarrow}$
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_right){21}
+	      	child { node (bottom_right) {4} }
+	      	child { node {14} };
+	      	\path[overlay] (top_left) --  node(aux1){\vphantom{x}}(bottom_left)
+	      	(top_right) --  node(aux2){\vphantom{x}} (bottom_right)
+	      	(aux1) -- node{$\rightsquigarrow$}(aux2);
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 5)}\\
+	      \begin{tikzpicture}
+	      	\node{41}
+	      	child { node {15} }
+	      	child { node {3} };
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 4)}\\
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_left){1}
+	      	child { node {18} }
+	      	child { node (bottom_left){23} };
+	      \end{tikzpicture}
+	      $\hphantom{\rightsquigarrow}$
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_right){23}
+	      	child { node (bottom_right) {18} }
+	      	child { node {1} };
+	      	\path[overlay] (top_left) --  node(aux1){\vphantom{x}}(bottom_left)
+	      	(top_right) --  node(aux2){\vphantom{x}} (bottom_right)
+	      	(aux1) -- node{$\rightsquigarrow$}(aux2);
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 3)}\\
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_left){6}
+	      	child { node {21}
+	      		child { node {4} }
+	      		child { node {14} }
+	      	}
+	      	child [ missing ]
+	      	child { node {16}
+	      		child { node (bottom_left){8} }
+	      		child [ missing ]
+	      	};
+	      \end{tikzpicture}
+	      $\hphantom{\rightsquigarrow}$
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_right){21}
+	      	child { node {14}
+	      		child { node (bottom_right){4} }
+	      		child { node {6} }
+	      	}
+	      	child [ missing ]
+	      	child { node {16}
+	      		child { node {8} }
+	      		child [ missing ]
+	      	};
+	      	\path[overlay] (top_left) --  node(aux1){\vphantom{x}}(bottom_left)
+	      	(top_right) --  node(aux2){\vphantom{x}} (bottom_right)
+	      	(aux1) -- node{$\rightsquigarrow$}(aux2);
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 2)}\\
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_left){9}
+	      	child { node {23}
+	      		child { node {18} }
+	      		child { node {1} }
+	      	}
+	      	child [ missing ]
+	      	child { node {41}
+	      		child { node (bottom_left){15} }
+	      		child { node {3} }
+	      	};
+	      \end{tikzpicture}
+	      $\hphantom{\rightsquigarrow}$
+	      \begin{tikzpicture}[remember picture]
+	      	\node(top_right){41}
+	      	child { node {23}
+	      		child { node (bottom_right){18} }
+	      		child { node {1} }
+	      	}
+	      	child [ missing ]
+	      	child { node {15}
+	      		child { node {9} }
+	      		child { node {3} }
+	      	};
+	      	\path[overlay] (top_left) --  node(aux1){\vphantom{x}}(bottom_left)
+	      	(top_right) --  node(aux2){\vphantom{x}} (bottom_right)
+	      	(aux1) -- node{$\rightsquigarrow$}(aux2);
+	      \end{tikzpicture}
+	\item \textbf{HEAPIFY(A, 1)}\\
+	      \begin{tikzpicture}
+	      	\node{12}
+	      	child { node {41} 
+	      		child { node {23}
+	      			child { node {18} }
+	      			child { node {1} }
+	      		}
+	      		child [ missing ]
+	      		child { node {15}   
+	      			child { node {9} }
+	      			child { node {3} }
+	      		}
+	      	} 
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child {node {21} 
+	      		child { node {14}
+	      			child { node {4} }
+	      			child { node {6} }
+	      		}
+	      		child [ missing ]
+	      		child { node {16} 
+	      			child { node {8} }
+	      		}
+	      	};
+	      \end{tikzpicture}	              
+	      \begin{center}
+	      	\begin{rotate}{-90}$\rightsquigarrow$\end{rotate}
+	      \end{center}
+	      \vspace*{1\baselineskip}
+	      \begin{tikzpicture}
+	      	\node{41}
+	      	child { node {23} 
+	      		child { node {18}
+	      			child { node {12} }
+	      			child { node {1} }
+	      		}
+	      		child [ missing ]
+	      		child { node {15}   
+	      			child { node {9} }
+	      			child { node {3} }
+	      		}
+	      	} 
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child {node {21} 
+	      		child { node {14}
+	      			child { node {4} }
+	      			child { node {6} }
+	      		}
+	      		child [ missing ]
+	      		child { node {16} 
+	      			child { node {8} }
+	      		}
+	      	};
+	      \end{tikzpicture}
+\end{itemize}
+\vspace*{1\baselineskip}
+
+\subsection*{2.b)}
+\begin{itemize}
+	\item \textbf{Nach 1x \texttt{Heap-Extract-Max(A)}}\\
+	      \begin{tikzpicture}
+	      	\node{23}
+	      	child { node {18} 
+	      		child { node {12}
+	      			child { node {8} }
+	      			child { node {1} }
+	      		}
+	      		child [ missing ]
+	      		child { node {15}   
+	      			child { node {9} }
+	      			child { node {3} }
+	      		}
+	      	} 
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child {node {21} 
+	      		child { node {14}
+	      			child { node {4} }
+	      			child { node {6} }
+	      		}
+	      		child [ missing ]
+	      		child { node {16}	}
+	      	};
+	      \end{tikzpicture}
+	\item \textbf{Nach 2x \texttt{Heap-Extract-Max(A)}}\\
+	      \begin{tikzpicture}
+	      	\node{21}
+	      	child { node {18} 
+	      		child { node {12}
+	      			child { node {8} }
+	      			child { node {1} }
+	      		}
+	      		child [ missing ]
+	      		child { node {15}   
+	      			child { node {9} }
+	      			child { node {3} }
+	      		}
+	      	} 
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child {node {16} 
+	      		child { node {14}
+	      			child { node {4} }
+	      			child [ missing ]
+	      		}
+	      		child [ missing ]
+	      		child { node {6}	}
+	      	};
+	      \end{tikzpicture}
+	\item \textbf{Nach 3x \texttt{Heap-Extract-Max(A)}}\\
+	      \begin{tikzpicture}
+	      	\node{21}
+	      	child { node {18} 
+	      		child { node {12}
+	      			child { node {8} }
+	      			child { node {1} }
+	      		}
+	      		child [ missing ]
+	      		child { node {15}   
+	      			child { node {9} }
+	      			child { node {3} }
+	      		}
+	      	} 
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child [ missing ]
+	      	child {node {16} 
+	      		child { node {14} }
+	      		child [ missing ]
+	      		child { node {6}	}
+	      	};
+	      \end{tikzpicture}
+\end{itemize}
+
+\vspace*{1\baselineskip}
+
+\vspace*{2\baselineskip}
+\section*{Aufgabe 3}
+
+\subsection*{3.a)}
+
+\vspace*{1\baselineskip}
+
+\subsection*{3.b)}
+
+\vspace*{2\baselineskip}
+\section*{Aufgabe 4}
+
+\subsection*{4.a)}
+\vspace*{1\baselineskip}
+
+\subsection*{4.b)}
+\vspace*{1\baselineskip}
+
+\subsection*{4.c)}
+\vspace*{1\baselineskip}
+
+\subsection*{4.d)}
+\vspace*{1\baselineskip}
+
+\subsection*{4.e0)}
+
+\end{document}
