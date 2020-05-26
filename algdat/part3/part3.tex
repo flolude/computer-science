@@ -375,7 +375,7 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 	      	\EndFor
 	      	\State \textbf{return} $min$
 	      \end{algorithmic}
-	      \texttt{FindMin} brauchst $n-\floor{\frac{n}{2}}+1$ Schritte und hat somit eine Laufzeit von $\text{O}(n)$.
+	      \texttt{FindMin} braucht höchstens $\floor{\frac{n+1}{2}}$ Schritte und hat somit eine Laufzeit von $\text{O}(n)$.
 \end{itemize}  
 
 \vspace*{2\baselineskip}
@@ -400,16 +400,31 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 \[ n^{log_b a}=n^{log_7 5} \approx n^{0.8} < n^1 < f(n) \]
 \[ \text{Fall 3, weil } f(n) \in \Omega (n^{log_b a + \epsilon}) \approx \Omega (n^{0.8 + \epsilon}) \]
 \[ \text{Regularitätsbedingung prüfen:} \]
-\[ a\cdot f(\frac{n}{b}) \leq c \cdot f(n) \Leftrightarrow \]
+\[
+	a\cdot f(\frac{n}{b}) \leq c \cdot f(n) \Leftrightarrow
+	5 \cdot \frac{n}{7} \text{log }\frac{n}{7} \leq c \cdot n\text{ log }n;
+\]
+\[ \implies c \geq \frac{5}{7} \cdot 1- \text{log}_n 7;\quad  n>1 \]
+\[ \implies T(n) \in \Theta(f(n))=\Theta(n \text{ log }n) \]
 \vspace*{1\baselineskip}
 
 \subsection*{d)}
 \[ T(n)=2\cdot T(\frac{n}{4})+3n^{\frac{1}{4}}+\text{ log }n \rightsquigarrow a=2, b=4, f(n)=3n^{\frac{1}{4}}+\text{ log }n \]
-\[ n^{log_b a}=n^{log_4 2} = n^\frac{1}{4} < 3n^{\frac{1}{4}} < f(n) \]
+\[ n^{log_b a}=n^{log_4 2} = n^\frac{1}{2} > f(n) \]
+\[ \text{Fall 1, weil } f(n) \in \text{O} (n^{\frac{1}{2} - \epsilon}) \]
+\[ \implies T(n) \in \Theta (n^\frac{1}{2}) \]
 \vspace*{1\baselineskip}
 
 \subsection*{e)}
 \[ T(n)=16\cdot T(\frac{n}{4})+n^2\text{ log }n \rightsquigarrow a=16, b=4, f(n)=n^2\text{ log }n \]
 \[ n^{log_b a}=n^{log_4 16} = n^2 < f(n) \]
-
+\[ \text{Fall 3, weil } f(n) \in \Omega (n^{2 + \epsilon}) \]
+\[ \text{Regularitätsbedingung prüfen:} \]
+\[
+	a\cdot f(\frac{n}{b}) \leq c \cdot f(n) \Leftrightarrow
+	16 \cdot {(\frac{n}{4})}^2 \text{ log } \frac{n}{4} \leq c \cdot n^2\text{ log }n
+\]
+\[ \implies c\ge 1-2 \cdot \text{log} _n 2; \quad n>1 \]
+\[ \text{Es gibt kein n für welches die Regularitätsbedingung gilt.} \]
+\[ \text{Das Mastertheorem kann also nicht angewendet werden!} \]
 \end{document}
