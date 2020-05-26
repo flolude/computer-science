@@ -382,22 +382,34 @@ A = (12, 9, 6, 1, 41, 4, 16, 18, 23, 15, 3, 21, 14, 8) als Heap:
 \section*{Aufgabe 4}
 
 \subsection*{a)}
-$T(n)=5\cdot T(\frac{n}{2})+n\sqrt{n}$
+\[ T(n)=5\cdot T(\frac{n}{2})+n\sqrt{n} \rightsquigarrow a=5, b=2, f(n)=n\sqrt{n} \]
+\[ n^{log_b a}=n^{log_2 5} \approx n^{2.3} > n^{1.5}=n\cdot n^{0.5} = f(n) \]
+\[ \text{Fall 1, weil } f(n) \in \text{O} (n^{log_b(a) - \epsilon}) \approx \text{O}(n^{2.3 - \epsilon}) \]
+\[ \implies T(n) \in \Theta (n^{log_2 5}) \]
 \vspace*{1\baselineskip}
 
 \subsection*{b)}
-$T(n)=16\cdot T(\frac{n}{8})+n^{\frac{4}{3}}$
+\[ T(n)=16\cdot T(\frac{n}{8})+n^{\frac{4}{3}} \rightsquigarrow a=16, b=8, f(n)=n^\frac{4}{3} \]
+\[ n^{log_b a}=n^{log_8 16} = n^\frac{4}{3} = f(n) \]
+\[ \text{Fall 2, weil } f(n) \in \Theta (n^{log_b a}) = \Theta (n^\frac{4}{3}) \]
+\[ \implies T(n) \in \Theta (n^\frac{4}{3} \cdot \text{log }n) \]
 \vspace*{1\baselineskip}
 
 \subsection*{c)}
-$T(n)=5\cdot T(\frac{n}{7})+n\text{ log }n$
+\[ T(n)=5\cdot T(\frac{n}{7})+n\text{ log }n \rightsquigarrow a=5, b=7, f(n)=n\text{ log }n \]
+\[ n^{log_b a}=n^{log_7 5} \approx n^{0.8} < n^1 < f(n) \]
+\[ \text{Fall 3, weil } f(n) \in \Omega (n^{log_b a + \epsilon}) \approx \Omega (n^{0.8 + \epsilon}) \]
+\[ \text{Regularitätsbedingung prüfen:} \]
+\[ a\cdot f(\frac{n}{b}) \leq c \cdot f(n) \Leftrightarrow \]
 \vspace*{1\baselineskip}
 
 \subsection*{d)}
-$T(n)=2\cdot T(\frac{n}{4})+3n^{\frac{1}{4}}+\text{ log }n$
+\[ T(n)=2\cdot T(\frac{n}{4})+3n^{\frac{1}{4}}+\text{ log }n \rightsquigarrow a=2, b=4, f(n)=3n^{\frac{1}{4}}+\text{ log }n \]
+\[ n^{log_b a}=n^{log_4 2} = n^\frac{1}{4} < 3n^{\frac{1}{4}} < f(n) \]
 \vspace*{1\baselineskip}
 
 \subsection*{e)}
-$T(n)=16\cdot T(\frac{n}{4})+n^2\text{ log }n$
+\[ T(n)=16\cdot T(\frac{n}{4})+n^2\text{ log }n \rightsquigarrow a=16, b=4, f(n)=n^2\text{ log }n \]
+\[ n^{log_b a}=n^{log_4 16} = n^2 < f(n) \]
 
 \end{document}
