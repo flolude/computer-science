@@ -1,0 +1,90 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Rechnerstrukturen: Übungsblatt 3}
+\author{Florian Ludewig (185722)}
+\date\today
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 3}
+\begin{lstlisting}
+int bool_or(int x, int y)
+{
+  return bis(x, y);
+}
+
+int bool_xor(int x, int y)
+{
+  return bis(bic(x, y), bic(y, x));
+}
+\end{lstlisting}
+\vspace*{1\baselineskip}
+
+\section*{Aufgabe 5}
+\begin{lstlisting}
+#include <stdio.h>
+
+int count_bits(unsigned int x)
+{
+  unsigned int i = 0;
+  while (x)
+  {
+    i = i + (x & 1);
+    x = x >> 1;
+  }
+  return i;
+}
+
+int main(void)
+{
+  unsigned int x, y;
+  printf("Enter x: ");
+  scanf("%d", &x);
+  printf("Enter y: ");
+  scanf("%d", &y);
+
+  unsigned int result = (unsigned int)(x & ~y) | (~x & y);
+  printf("Result: %d\n", result);
+  printf("Number of bits: %d\n", count_bits(result));
+  return result;
+}
+\end{lstlisting}
+\vspace*{1\baselineskip}
+
+\pagebreak
+\section*{Aufgabe 7}
+\begin{lstlisting}
+unsigned rotate_left(unsigned x, int n)
+{
+  return (x << (4 * n)) | (x >> (sizeof(unsigned) - (4 * n)));
+}
+
+unsigned rotate_right(unsigned x, int n)
+{
+  return (x >> (4 * n)) | (x << (sizeof(unsigned) - (4 * n)));
+}
+\end{lstlisting}
+
+\end{document}
