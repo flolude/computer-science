@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Rechnerstrukturen: Übungsblatt 4}
+\author{Florian Ludewig (185722)}
+\date\today
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=C,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 3}
+\begin{lstlisting}
+int odd_ones(unsigned x)
+{
+  for (int i = 16; i >= 1; i /= 2)
+  {
+    int shifted = x >> i;
+    x = x ^ shifted;
+  }
+  return x << 31 >> 31;
+}
+\end{lstlisting}
+
+Die Anfangs 32-stellige Bitsequencz wird jede Iteration der Schleife in zwei gleich
+große Abschnitte geteilt. Diese Abschnitte werden dann mit einem bitweisen \texttt{XOR} verglichen.
+Wenn \texttt{x} ursprünglich eine ungerade Anzahl an Einsen hatte, hat auch das neue Zwischenergebnis,
+welches nur noch halb so groß ist, wieder eine ungerade Anzahl an Einsen (gilt ebenfalls
+für gerade Anzahl an Einsen). In der letzten Iteration ist somit das einzige Bit welches
+übrig bleibt entweder \texttt{1} (ungerade Anzahl an Einsen) oder \texttt{0} (gerade Anzahl an Einsen).
+
+\vspace*{2\baselineskip}
+\section*{Aufgabe 4}
+\begin{lstlisting}
+// TODO
+\end{lstlisting}
+
+\end{document}
