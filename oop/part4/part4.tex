@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{graphicx}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 4}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsubsection*{Java Implementierung}
+\texttt{Einwohner.java}
+\begin{lstlisting}
+public class Einwohner {
+  protected double steuer_faktor = 0.1;
+  protected int einkommen;
+  protected int mindestAbgabe = 1;
+
+  int zuVersteuerndesEinkommen() {
+    return this.einkommen;
+  }
+
+  int steuer() {
+    int abgabe = (int) Math.floor(this.zuVersteuerndesEinkommen() * this.steuer_faktor);
+    return abgabe > this.mindestAbgabe ? abgabe : this.mindestAbgabe;
+  }
+
+  void setEinkommen(int einkommen) {
+    this.einkommen = einkommen;
+  }
+}
+\end{lstlisting}
+\texttt{Adel.java}
+\begin{lstlisting}
+public class Adel extends Einwohner {
+  Adel() {
+    this.mindestAbgabe = 20;
+  }
+}
+\end{lstlisting}
+\texttt{Koenig.java}
+\begin{lstlisting}
+public class Koenig extends Einwohner {
+  int steuer() {
+    /*
+      * Ich gehe davon aus, dass der Koenig auch den Mindestbetrag von 1 Gulden nicht
+      * zahlen muss (ist aus 3. nicht genau hervorgegangen)
+      */
+    return 0;
+  }
+}
+\end{lstlisting}
+\texttt{Leibeigener.java}
+\begin{lstlisting}
+public class Leibeigener extends Bauer {
+  int zuVersteuerndesEinkommen() {
+    return this.einkommen > 12 ? this.einkommen - 12 : 12;
+  }
+}
+\end{lstlisting}
+
+\subsubsection*{Ergänztes Klassdendiagramm}
+\includegraphics[width=\textwidth]{oop4_1.png}
+
+
+\vspace*{2\baselineskip}
+\section*{Aufgabe 2}
+
+
+
+
+\end{document}
