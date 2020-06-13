@@ -1,0 +1,198 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 5}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\texttt{Auto.java}
+\begin{lstlisting}
+class Auto {
+  private String kennzeichen = "J-AA 01";
+  private int kilometerstand = 0;
+  private ESitzplatz sitzplaetze = ESitzplatz.FUENF;
+  private boolean antenneEingefahren = true;
+
+  Auto() {
+  }
+
+  Auto(String knz) {
+    kennzeichen = knz;
+  }
+
+  Auto(ESitzplatz sp) {
+    sitzplaetze = sp;
+  }
+
+  public String getKennzeichen() {
+    return kennzeichen;
+  }
+
+  public int getKilometerstand() {
+    return kilometerstand;
+  }
+
+  public int getSitzplaetze() {
+    return sitzplaetze == ESitzplatz.FUENF ? 5 : 2;
+  }
+
+  public void fahre(int kilometer) {
+    System.out.println("Das Auto ist " + kilometer + " km gefahren");
+    kilometerstand += kilometer;
+  }
+
+  public void fahreAntenneAus() {
+    antenneEingefahren = false;
+    System.out.println("Antenne wurde ausgefahren");
+  }
+
+  public void fahreAntenneEin() {
+    antenneEingefahren = true;
+    System.out.println("Antenne wurde eingefahren");
+  }
+
+  public void bereiteWaschenVor() {
+    fahreAntenneEin();
+  }
+
+  public void wasche() {
+    bereiteWaschenVor();
+    System.out.println("Das Auto wird geschwaschen");
+  }
+
+  public String toString() {
+    String antennenString = antenneEingefahren ? "eingefahren" : "ausgefahren";
+    return "Das Auto mit dem Kennzeichen " + getKennzeichen() + " hat " + getSitzplaetze()
+        + " Sitzplaetze und der Kilometerstand ist " + getKilometerstand() + " km. Die Antenne ist" + antennenString
+        + ".";
+  }
+}
+\end{lstlisting}
+\texttt{ESitzplatz.java}
+\begin{lstlisting}
+public enum ESitzplatz {
+  ZWEI, FUENF
+}
+\end{lstlisting}
+\texttt{PickUp.java}
+\begin{lstlisting}
+class PickUp extends Auto {
+  private int ladung = 0;
+  private int f;
+
+  int getLadung() {
+    return ladung;
+  }
+
+  PickUp(int fassungsvermoegen) {
+    super(ESitzplatz.ZWEI);
+    f = fassungsvermoegen;
+  }
+
+  boolean beladen(int ldg) {
+    if (ladung + ldg > f)
+      return false;
+    ladung += ldg;
+    System.out.println("Du hast " + ldg + " Liter auf den PickUp geladen");
+    return true;
+  }
+
+  void entladen(int ldg) {
+    if (ldg > ladung)
+      throw new Error("Du hast nur " + ladung + " Liter auf dem PickUp");
+    ladung -= ldg;
+    System.out.println("Du hast " + ldg + " Liter vom PickUp geladen");
+  }
+
+  void entladen() {
+    entladen(ladung);
+  }
+
+  public void bereiteWaschenVor() {
+    super.bereiteWaschenVor();
+    entladen();
+  }
+
+  public String toString() {
+    return super.toString() + " Der PickUp hat eine Ladefleache von " + f + " Liter und momentan sind " + ladung
+        + " Liter aufgeladen.";
+  }
+}
+\end{lstlisting}
+\texttt{AutoTest.java}
+\begin{lstlisting}
+import java.util.ArrayList;
+
+class AutoTest {
+  ArrayList<Auto> list = new ArrayList<Auto>();
+
+  AutoTest() {
+    list.add(new Auto());
+    list.add(new Auto(ESitzplatz.ZWEI));
+    list.add(new Auto("X-YZ-42"));
+    list.add(new PickUp(777));
+    list.add(new PickUp(1234));
+
+    printList();
+
+    Auto a1 = list.get(0);
+    a1.fahre(100);
+    a1.fahreAntenneEin();
+
+    Auto a2 = list.get(1);
+    a2.fahre(200);
+    a2.fahreAntenneAus();
+
+    Auto a3 = list.get(2);
+    a3.fahre(300);
+    a3.wasche();
+
+    PickUp p1 = (PickUp) list.get(3);
+    p1.fahre(400);
+    p1.beladen(500);
+    p1.entladen(100);
+    p1.bereiteWaschenVor();
+
+    PickUp p2 = (PickUp) list.get(4);
+    p2.fahre(600);
+    p2.beladen(700);
+    p2.entladen();
+
+    printList();
+  }
+
+  private void printList() {
+    for (Auto auto : list) {
+      System.out.println(auto.toString());
+    }
+  }
+}
+\end{lstlisting}
+
+
+\end{document}
