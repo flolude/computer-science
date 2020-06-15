@@ -42,15 +42,33 @@
 unsigned W = sizeof(unsigned) * 8;
 unsigned x, y;
 
-unsigned a() { return ~((x | (~x + 1)) >> (W - 1)) & 1; }
-unsigned b() { return ~((x >> (W - 1)) >> 1); }
-unsigned c() { return ~(~x | (y ^ (INT_MIN + INT_MAX))); }
-unsigned d() { return x ^ (INT_MIN + INT_MAX); }
-unsigned e() { return ((x ^ y) & ~y) | (~(x ^ y) & y); }
-unsigned f() { return ((x < 0) ? (x + 3) : x) >> 2; }
+int arithmeticRightShift(int x, int n) {
+    if (x < 0 && n > 0)
+        return x >> n | ~(~0U >> n);
+    else
+        return x >> n;
+}
 
-void test_all(unsigned expected_value)
-{
+unsigned a() {
+  return ~(arithmeticRightShift((x|(~x+1)), W-1))&1;
+}
+unsigned b() {
+  return ~(arithmeticRightShift(x, W-1) << 1);
+}
+unsigned c() {
+  return ~(~x|(y^(INT_MIN+INT_MAX)));
+}
+unsigned d() {
+  return x^(INT_MIN+INT_MAX);
+}
+unsigned e() {
+  return ((x^y)&~y)|(~(x^y)&y);
+}
+unsigned f() {
+  return arithmeticRightShift(((x<0) ? (x+3) : x), 2);
+}
+
+void test_all(unsigned expected_value) {
   printf("a: %0x ?== %0x (match: %d)\n", expected_value, a(), expected_value == a());
   printf("b: %0x ?== %0x (match: %d)\n", expected_value, b(), expected_value == b());
   printf("c: %0x ?== %0x (match: %d)\n", expected_value, c(), expected_value == c());
@@ -59,52 +77,62 @@ void test_all(unsigned expected_value)
   printf("f: %0x ?== %0x (match: %d)\n", expected_value, f(), expected_value == f());
 }
 
-int main(void)
-{
+int main(void) {
   srand(time(NULL));
-  x = (~rand()) + 1;
-  y = (~rand()) + 1;
+  x = (~rand())+1;
+  y = (~rand())+1;
 
   printf("1:\n");
   test_all(x);
 
   printf("\n2:\n");
-  test_all(x & y);
+  test_all(x&y);
 
-  printf("\n3:\n");
-  test_all((x < 0 ? 1 : -1));
+  printf("\n3 positive x:\n");
+  test_all((x<0?1:-1));
+
+  x = (~-34546)+1;
+  printf("\n3 negative x:\n");
+  test_all((x<0?1:-1));
 
   return 0;
 }
 \end{lstlisting}
 
-\pagebreak
 Die Ausgabe des obigen C-Programms ist:
 
 \begin{lstlisting}
 1:
-a: 94bf71d1 ?== 0 (match: 0)
-b: 94bf71d1 ?== ffffffff (match: 0)
-c: 94bf71d1 ?== 80b63001 (match: 0)
-d: 94bf71d1 ?== 6b408e2e (match: 0)
-e: 94bf71d1 ?== 94bf71d1 (match: 1)
-f: 94bf71d1 ?== 252fdc74 (match: 0)
+a: ab739e86 ?== 0 (match: 0)
+b: ab739e86 ?== 1 (match: 0)
+c: ab739e86 ?== 89529682 (match: 0)
+d: ab739e86 ?== 548c6179 (match: 0)
+e: ab739e86 ?== ab739e86 (match: 1)
+f: ab739e86 ?== eadce7a1 (match: 0)
 
 2:
-a: 80b63001 ?== 0 (match: 0)
-b: 80b63001 ?== ffffffff (match: 0)
-c: 80b63001 ?== 80b63001 (match: 1)
-d: 80b63001 ?== 6b408e2e (match: 0)
-e: 80b63001 ?== 94bf71d1 (match: 0)
-f: 80b63001 ?== 252fdc74 (match: 0)
+a: 89529682 ?== 0 (match: 0)
+b: 89529682 ?== 1 (match: 0)
+c: 89529682 ?== 89529682 (match: 1)
+d: 89529682 ?== 548c6179 (match: 0)
+e: 89529682 ?== ab739e86 (match: 0)
+f: 89529682 ?== eadce7a1 (match: 0)
 
-3:
+3 positive x:
+a: ffffffff ?== 0 (match: 0)
+b: ffffffff ?== 1 (match: 0)
+c: ffffffff ?== 8dd2100a (match: 0)
+d: ffffffff ?== 86f1 (match: 0)
+e: ffffffff ?== ffff790e (match: 0)
+f: ffffffff ?== ffffde43 (match: 0)
+
+3 negative x:
 a: ffffffff ?== 0 (match: 0)
 b: ffffffff ?== ffffffff (match: 1)
-c: ffffffff ?== 80b63001 (match: 0)
-d: ffffffff ?== 6b408e2e (match: 0)
-e: ffffffff ?== 94bf71d1 (match: 0)
-f: ffffffff ?== 252fdc74 (match: 0)
+c: ffffffff ?== 86e2 (match: 0)
+d: ffffffff ?== ffff790d (match: 0)
+e: ffffffff ?== 86f2 (match: 0)
+f: ffffffff ?== 21bc (match: 0)
 \end{lstlisting}
 
 Wodurch sich eindeutig folgende Lösungen ergeben:
@@ -113,6 +141,6 @@ Wodurch sich eindeutig folgende Lösungen ergeben:
 
 2) c
 
-3) b
+3) b für negative \texttt{x}, es gibt keine Lösung für positive \texttt{x}
 
 \end{document}
