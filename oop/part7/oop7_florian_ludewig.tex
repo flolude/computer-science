@@ -1,0 +1,137 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 7}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1.a)}
+\begin{tabular}{ l | c | p{120mm} }
+	Aufruf & Methode & Begründung                                                                                                                              \\
+	\hline
+	1      & -       & \texttt{1.0} und \texttt{2.0} werden als \texttt{double} interpretiert, aber keine der Methoden nimmt zwei \texttt{double} als Parameter \\
+	2      & 1       & es werden nur ganze Zahlen übergeben und, wodurch Methode 1 mehr spezifischer ist alse Methode 2                                        \\
+	3      & 1       & es werden nur ganze Zahlen übergeben und, wodurch Methode 1 mehr spezifischer ist alse Methode 2                                        \\
+	4      & 3       & \texttt{C} ist Unterklasse von \texttt{B} und implementiert somit zwingend alle Methoden und Attribute von B                             \\
+	5      & 4       & \texttt{A} ist allgemeiner als \texttt{B}, weile es eine Oberklasse von \texttt{B} ist                                                   \\
+	6      & 4       & \texttt{B} als zweiter Parameter von Aufruf 6 kann nicht in ein \texttt{C} aus Methode 3 umgewandelt werden                              \\
+	7      & -       & Die Klasse \texttt{A} kann weder in ein \texttt{B} noch in ein \texttt{C} umgewandelt werden                                             \\
+\end{tabular}
+
+\subsection*{1.b}
+\begin{tabular}{ l | c | p{120mm} }
+	Aufruf & Ausgabe   & Begründung                                                                                                                           \\
+	\hline
+	1      & 1         & \texttt{p1} wurde als \texttt{Print1} erstellt und somit wird das \texttt{x} von \texttt{Print1} ausgegeben                           \\
+	2      & 4         & \texttt{print(B b)} aus \texttt{Print2} wird aufgerufen                                                                               \\
+	3      & 5         & \texttt{p1} ist vom Typ \texttt{Print2}, wodurch \texttt{print(C c)} aus \texttt{Print2} aufgerufen wird                              \\
+	4      & 4         & \texttt{p2} wird nicht in \texttt{Print1} umgewandelt, wodurch \texttt{print(B b)} aus \texttt{Print2} aufgerufen wird                \\
+	5      & 4         & \texttt{p2} wird nicht in \texttt{Print1} umgewandelt, wodurch \texttt{print(B b)} aus \texttt{Print2} aufgerufen wird                \\
+	6      & 5         & \texttt{print(C c)} in \texttt{Print2} wird aufgerufen, weil \texttt{C} nicht in \texttt{B} umgewandelt werden kann                   \\
+	7      & Exception & \texttt{Print1} kann nicht in \texttt{Print2} umgewandelt werden, weil \texttt{p1} mit \texttt{new new Print1()} überschrieben wurde \\
+\end{tabular}
+
+\section*{Aufgabe 2}
+\texttt{AbstrakteStringMenge.java}
+\begin{lstlisting}
+import java.util.LinkedList;
+import java.util.Iterator;
+
+public abstract class AbstrakteStringMenge implements StringMenge {
+  protected LinkedList<String> list = new LinkedList<String>();
+
+  public int getCharCount() {
+    int count = 0;
+    Iterator<String> iterator = list.iterator();
+    while(iterator.hasNext()) {
+      count += iterator.next().length();
+    }
+    return count;
+  }
+
+  public boolean isEmpty() {
+    return list.size() <= 0;
+  }
+
+  public void print() {
+    Iterator<String> iterator = list.iterator();
+    while(iterator.hasNext()) {
+      System.out.printf(iterator.next());
+    }
+  }
+}
+\end{lstlisting}
+\texttt{StringMenge.java}
+\begin{lstlisting}
+public interface StringMenge {
+  void add(String s);
+  void remove(String s);
+  boolean contains(String s);
+  boolean isEmpty();
+  int getSize();
+  String[] getElements();
+  int getCharCount();
+  void print();
+}
+\end{lstlisting}
+\texttt{StringMengeImpl.java}
+\begin{lstlisting}
+import java.util.Iterator;
+
+public class StringMengeImpl extends AbstrakteStringMenge {
+  public void add(String s) {
+    if (!contains(s)) list.add(s);
+  }
+
+  public void remove(String s) {
+    list.remove(list.indexOf(s));
+  }
+
+  public boolean contains(String s) {
+    return list.indexOf(s) >= 0;
+  }
+
+  public int getSize() {
+    return list.size();
+  }
+
+  public String[] getElements() {
+    String[] array = new String[getSize()];
+    int i = 0;
+    Iterator<String> iterator = list.iterator();
+    while(iterator.hasNext()) {
+      array[i] = iterator.next();
+      i++;
+    }
+    return array;
+  }
+}
+\end{lstlisting}
+
+
+\end{document}
