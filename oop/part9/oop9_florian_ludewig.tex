@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Objektorientierte Programmierung: Aufgabenblatt 9}
+\author{Florian Ludewig (185722)}
+\date\today
+
+
+\definecolor{my_red}{RGB}{216,60,104}
+\definecolor{my_green}{RGB}{68,189,77}
+\definecolor{my_grey}{RGB}{78,90,107}
+\lstdefinestyle{customCStyle}{
+  language=Java,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true,
+  showstringspaces=false,
+  keywordstyle=\color{my_red},
+  stringstyle=\color{my_green},
+  commentstyle=\color{my_grey},
+  morecomment=[l][\color{magenta}]
+}
+\lstset{basicstyle=\ttfamily\small,style=customCStyle}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\texttt{Pair.java}
+\begin{lstlisting}
+class Pair<T, U> {
+  private final T first;
+  private final U second;
+
+  Pair(T fst, U snd) {
+    first = fst;
+    second = snd;
+  }
+
+  T getFirst() {
+    return first;
+  }
+
+  U getSecond() {
+    return second;
+  }
+
+  public boolean equals(Pair<T, U> other) {
+    return other.getFirst().equals(getFirst()) && other.getSecond().equals(getSecond());
+  }
+}
+\end{lstlisting}
+\texttt{Relation.java}
+\begin{lstlisting}
+import java.util.HashSet;
+import java.util.Set;
+import java.util.ArrayList;
+
+public class Relation<T> {
+  private Set<T> set = new HashSet<>();
+  private Set<Pair<T, T>> relation = new HashSet<>();
+
+  public void add(T item) {
+    set.add(item);
+  }
+
+  public void addRelation(Pair<T, T> pair) {
+    relation.add(pair);
+  }
+
+  public boolean isReflexive() {
+    for (T item : set) {
+      Pair<T, T> search = new Pair<T, T>(item, item);
+      if (!containsPair(search))
+        return false;
+    }
+    return true;
+  }
+
+  public boolean isSymmetric() {
+    for (Pair<T, T> pair : relation) {
+      Pair<T, T> search = new Pair<T, T>(pair.getSecond(), pair.getFirst());
+      if (!containsPair(search))
+        return false;
+    }
+    return true;
+  }
+
+  public boolean isTransitive() {
+    for (Pair<Pair<T, T>, Pair<T, T>> candiate : getTransitiveCandidates()) {
+      Pair<T, T> search = new Pair<T, T>(candiate.getFirst().getFirst(), candiate.getSecond().getSecond());
+      if (!containsPair(search))
+        return false;
+    }
+    return true;
+  }
+
+  public boolean isEquivalent() {
+    return isReflexive() && isSymmetric() && isTransitive();
+  }
+
+  public void reflexiveShell() {
+    for (T item : set) {
+      Pair<T, T> search = new Pair<T, T>(item, item);
+      if (!containsPair(search)) {
+        addRelation(search);
+      }
+    }
+  }
+
+  public void symmetricShell() {
+    for (Pair<T, T> pair : relation) {
+      Pair<T, T> search = new Pair<T, T>(pair.getSecond(), pair.getFirst());
+      if (!containsPair(search)) {
+        addRelation(search);
+      }
+    }
+  }
+
+  public void transitiveShell() {
+    for (Pair<Pair<T, T>, Pair<T, T>> candiate : getTransitiveCandidates()) {
+      Pair<T, T> search = new Pair<T, T>(candiate.getFirst().getFirst(), candiate.getSecond().getSecond());
+      if (!containsPair(search)) {
+        addRelation(search);
+      }
+    }
+  }
+
+  public String toString() {
+    String output = "  ";
+    for (T item : set) {
+      output += " " + item;
+    }
+    output += "\n";
+    for (T item : set) {
+      output += item + " ";
+      for (T item2 : set) {
+        Pair<T, T> search = new Pair<>(item, item2);
+        output += containsPair(search) ? " x" : "  ";
+      }
+      output += "\n";
+    }
+    return output;
+  }
+
+  private ArrayList<Pair<Pair<T, T>, Pair<T, T>>> getTransitiveCandidates() {
+    ArrayList<Pair<Pair<T, T>, Pair<T, T>>> candiates = new ArrayList<>();
+    for (Pair<T, T> pair : relation) {
+      for (Pair<T, T> pair2 : relation) {
+        if (pair.getSecond().equals(pair2.getFirst()))
+          candiates.add(new Pair<Pair<T, T>, Pair<T, T>>(pair, pair2));
+      }
+    }
+    return candiates;
+  }
+
+  private boolean containsPair(Pair<T, T> search) {
+    for (Pair<T, T> pair : relation) {
+      if (pair.equals(search))
+        return true;
+    }
+    return false;
+  }
+}
+\end{lstlisting}
+\texttt{App.java}
+\begin{lstlisting}
+public class App {
+  public static void main(String[] args) throws Exception {
+    Relation<Integer> r = new Relation<>();
+    r.add(1);
+    r.add(2);
+    r.add(3);
+    r.add(4);
+
+    r.addRelation(new Pair<>(1, 2));
+    r.addRelation(new Pair<>(1, 1));
+    r.addRelation(new Pair<>(2, 2));
+    r.addRelation(new Pair<>(3, 3));
+    r.addRelation(new Pair<>(4, 4));
+    r.addRelation(new Pair<>(2, 4));
+    r.addRelation(new Pair<>(1, 4));
+
+    System.out.println("Ist reflexiv: " + (r.isReflexive() ? "true" : "false"));
+    System.out.println("Ist symmetrisch: " + (r.isSymmetric() ? "true" : "false"));
+    System.out.println("Ist transitiv: " + (r.isTransitive() ? "true" : "false"));
+    System.out.println("Ist Aequivalenzrelation: " + (r.isEquivalent() ? "true" : "false"));
+    System.out.println("Matrixdarstellung:\n" + r.toString());
+  }
+}
+\end{lstlisting}
+
+\end{document}
